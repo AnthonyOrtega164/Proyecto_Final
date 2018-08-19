@@ -14,12 +14,14 @@ use Illuminate\Database\Eloquent\Model;
  * @author Usuario
  */
 class Persona extends Model {
-    
-    protected  $table = 'persona';
-    protected  $primaryKey = 'id_persona';
+    protected $table = 'persona';
+    protected $primaryKey = 'id_persona';
     public $timestamps = false;
-    protected $fillable = ['correo_persona','nombre_persona','telefono_persona', 'foto_persona'];
-    protected $guarded =['id_persona'];
+    protected $fillable = ['correo_persona', 'nombre_persona', 'telefono_persona', 'foto_persona'];
+    protected $guarded = ['id_persona'];
     
-    
+    public function publicacion() {
+        return $this->hasMany('App\Models\Publicacion', 'id_persona');
     }
+
+}
