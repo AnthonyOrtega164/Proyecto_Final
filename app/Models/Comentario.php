@@ -20,7 +20,7 @@ class Comentario extends Model {
     protected $table = 'comentario';
     protected $primaryKey = 'id_comentario';
     public $timestamps = false;
-    protected $fillable = ['comentario', 'created_at', 'updated_at', 'estado', 'nombre_usuario', 'id_publicacion'];
+    protected $fillable = ['external_id','comentario', 'created_at', 'updated_at', 'estado', 'nombre_usuario', 'id_publicacion'];
     protected $guarded = ['id_comentario'];
 
     public function publicacion() {

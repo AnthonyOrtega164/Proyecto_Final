@@ -5,18 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 namespace App\Http\Controllers;
 
+use App\Models\Persona;
+use Illuminate\Http\Request;
 /**
- * Description of TestController
+ * Description of PersonaController
  *
  * @author antho
  */
-class TestController extends Controller{
-    public function index($msg) {
-        echo $msg;
-        $data=\App\Models\Persona::all();
-        return response()->json($data,200);
-    }
+class PersonaController extends Controller{
+    
+    
 }
