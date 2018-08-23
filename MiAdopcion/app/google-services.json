@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "149312815609",
+    "firebase_url": "https://miadopcion-b82a7.firebaseio.com",
+    "project_id": "miadopcion-b82a7",
+    "storage_bucket": "miadopcion-b82a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149312815609:android:7f7c1996e95c4a19",
+        "android_client_info": {
+          "package_name": "com.adom.miadopcion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "149312815609-5ot88sd1adg3kkcm0h9scvvfbnjpupdu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adom.miadopcion",
+            "certificate_hash": "4a4c9a161bd387e839cfe1a25ad56e36ae956812"
+          }
+        },
+        {
+          "client_id": "149312815609-kj72gf40gkss7n32ejgllr07sm530fk3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtkhyD82fQZjztrOBWQERwAVCX-Pw9fIo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "149312815609-kj72gf40gkss7n32ejgllr07sm530fk3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
