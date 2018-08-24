@@ -5,9 +5,16 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+
     <string name="action_settings">Cerrar Sesion</string>
     <string name="facebook_app_id">630286100691106</string>
     <string name="fb_login_protocol_scheme">fb630286100691106</string>
     <string name="error_login">Se ha producido un error en el inicio de sesion </string>
     <string name="cancelado">Se ha cancelado la operacion</string>
+    <string name="cancel_login">cancelado</string>
+    <string name="firebase_error_login">error</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="welcome">Bienvenido</string>
+
+
 </resources>
