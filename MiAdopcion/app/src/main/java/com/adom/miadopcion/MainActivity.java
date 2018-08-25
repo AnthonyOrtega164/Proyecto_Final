@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             nameTextView.setText(name);
             emailTextView.setText(email);
             uidTextView.setText(uid);
+
         } else {
             goLoginScreen();
         }
@@ -52,5 +53,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
         goLoginScreen();
+    }
+    public void mapa(View view){
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
