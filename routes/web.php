@@ -16,3 +16,5 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/test/{msg}','TestController@index');
+$router->get('/listarUser/{correo_persona}', 'PublicacionController@listarUser');
+$router->get('/listar', 'PublicacionController@listar');

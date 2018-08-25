@@ -32,8 +32,6 @@ class ComentarioController {
                     $comentario->external_id=utilidades\UUID::v4();
                     $comentario->comentario = $data["comentario"];
                     $comentario->nombre_usuario = $data['nombre_usuario'];
-                    $comentario->id_publicacion=$data['id_publicacion'];
-                    $comentario->estado=true;
                     $comentario->publi()->associate($publicacion);
                     $comentario->save();
 
@@ -51,8 +49,8 @@ class ComentarioController {
 
     public function listar($id_publicacion) {
         $this->id = $id_publicacion;
-        $lista = Publicacion::whereHas('publi', function ($ad) {
-                    $ad->where('id_publicacion', $this->id);
+        $lista = Publicacion::whereHas('publicacion', function ($ad) {
+                    $ad->where('id_publicacion', $this->id)->where("estado", "true");
                 })->orderBy('created_at', 'desc')->get();
         $data = array();
         foreach ($lista as $value) {
@@ -84,7 +82,7 @@ class ComentarioController {
             if ($request->isJson()) {
                 $data = $request->json()->all();
                 $comentario = Comentario::find($comenta->id);
-                $comentario->estado=false;
+                $comentario->estado="false";
                 $comentario->save();
                 return response()->json(["mensaje" => "Opercion Exitosa", "siglas" => "OE"], 200);
             } else {

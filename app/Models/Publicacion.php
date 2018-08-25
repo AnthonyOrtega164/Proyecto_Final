@@ -19,11 +19,11 @@ class Publicacion extends Model {
 
     protected $table = 'publicacion';
     protected $primaryKey = 'id_publicacion';
-    protected $fillable = ['external_id','titulo','descripcion', 'estado', 'categoria','ubicacion','created_at','updated_at','id_persona','ruta_imagen'];
+    protected $fillable = ['external_id','titulo','descripcion', 'estado', 'categoria','ubicacion','created_at','updated_at','correo_persona','ruta_imagen'];
     protected $guarded = ['id_publicacion'];
     
     public function persona( ) {
-        return $this->belongsTo('App\Models\Persona','id_persona'); 
+        return $this->belongsTo('App\Models\Persona','correo_persona'); 
     }
 
     public function comentario( ) {

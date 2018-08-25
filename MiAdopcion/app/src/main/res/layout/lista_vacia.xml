@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:gravity="center"
+android:orientation="vertical"
+android:padding="20dp">
+    <ImageView
+        android:layout_width="75dip"
+        android:layout_height="75dip"
+        android:id="@+id/imgFilm"
+        android:src="@drawable/pata"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTitulo"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imgFilm"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="15dip"
+        android:textStyle="bold"
+        android:text="TextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvYear"
+        android:layout_alignBottom="@id/imgFilm"
+        android:layout_toRightOf="@+id/imgFilm"
+        android:textColor="#343434"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:text="TextView"/>
+
+
+</LinearLayout>

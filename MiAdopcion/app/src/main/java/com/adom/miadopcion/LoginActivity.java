@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         callbackManager = CallbackManager.Factory.create();

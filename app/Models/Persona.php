@@ -15,13 +15,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Persona extends Model {
     protected $table = 'persona';
-    protected $primaryKey = 'id_persona';
+    protected $primaryKey = 'correo_persona';
     public $timestamps = false;
-    protected $fillable = ['correo_persona', 'nombre_persona', 'telefono_persona', 'foto_persona'];
-    protected $guarded = ['id_persona'];
+    protected $fillable = ['nombre_persona', 'telefono_persona', 'foto_persona'];
+    protected $guarded = ['correo_persona'];
     
     public function publicacion() {
-        return $this->hasMany('App\Models\Publicacion', 'id_persona');
+        return $this->hasMany('App\Models\Publicacion', 'correo_persona');
     }
 
 }
