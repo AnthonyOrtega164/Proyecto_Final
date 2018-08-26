@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@drawable/gradiente">
 
     <ImageView
         android:layout_width="75dip"
@@ -14,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvTitulo"
+        android:id="@+id/titulo"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imgFilm"
         android:textColor="#040404"
@@ -26,7 +27,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvYear"
+        android:id="@+id/descripcion"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/imgFilm"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="15dip"
+        android:textStyle="bold"
+        android:text="TextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fecha"
         android:layout_alignBottom="@id/imgFilm"
         android:layout_toRightOf="@+id/imgFilm"
         android:textColor="#343434"

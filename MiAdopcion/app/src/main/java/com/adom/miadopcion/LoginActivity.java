@@ -1,6 +1,5 @@
 package com.adom.miadopcion;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +8,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.adom.miadopcion.modelos.Persona;
+import com.adom.miadopcion.ws.Conexion;
+import com.adom.miadopcion.ws.VolleyPeticion;
+import com.adom.miadopcion.ws.VolleyProcesadorResultado;
+import com.adom.miadopcion.ws.VolleyTiposError;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -24,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,12 +43,14 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
     private ProgressBar progressBar;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
 
+        requestQueue= Volley.newRequestQueue(getApplicationContext());
+        setContentView(R.layout.login);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -57,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(getApplicationContext(), R.string.cancel_login, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "se ha cancelado", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -72,6 +83,29 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    HashMap<String, String> mapa=new HashMap<>();
+                    mapa.put("correo_persona",user.getEmail());
+                    mapa.put("nombre_persona",user.getDisplayName());
+                    mapa.put("telefono_persona",user.getPhoneNumber());
+                    mapa.put("foto_persona",user.getPhotoUrl().getPath());
+                    VolleyPeticion<Persona> inicio=
+                            Conexion.iniciarSesion(getApplicationContext(),
+                                    mapa,
+                                    new Response.Listener<Persona>() {
+                                @Override
+                                public void onResponse(Persona response) {
+                                        Toast.makeText(getApplicationContext(),response.mensaje,Toast.LENGTH_LONG).show();
+                                }
+                            },
+                            new Response.ErrorListener(){
+                                @Override
+                                public void onErrorResponse(VolleyError error){
+                                    VolleyTiposError errores= VolleyProcesadorResultado.parseErrorResponse(error);
+                                    Toast.makeText(getApplicationContext(),errores.errorMessage,Toast.LENGTH_LONG).show();
+                                }
+                            }
+                    );
+                    requestQueue.add(inicio);
                     goMainScreen();
                 }
             }

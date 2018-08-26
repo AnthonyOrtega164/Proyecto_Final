@@ -1,11 +1,4 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +12,7 @@ class Publicacion extends Model {
 
     protected $table = 'publicacion';
     protected $primaryKey = 'id_publicacion';
-    protected $fillable = ['external_id','titulo','descripcion', 'estado', 'categoria','ubicacion','created_at','updated_at','correo_persona','ruta_imagen'];
+    protected $fillable = ['external_id','titulo','descripcion', 'estado', 'categoria','created_at','updated_at','correo_persona','ruta_imagen','telefono_persona'];
     protected $guarded = ['id_publicacion'];
     
     public function persona( ) {

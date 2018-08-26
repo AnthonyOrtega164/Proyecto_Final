@@ -5,7 +5,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-
     <string name="action_settings">Cerrar Sesion</string>
     <string name="facebook_app_id">630286100691106</string>
     <string name="fb_login_protocol_scheme">fb630286100691106</string>
@@ -16,6 +15,7 @@
     <string name="logout">Cerrar sesión</string>
     <string name="welcome">Bienvenido</string>
     <string name="title_activity_maps">Map</string>
-
-
+    <string name="descr">Esta Aplicación esta hecha con el fin de encontrar un buen hogar a nuestras mascotas.</string>
+    <string name="com_facebook_ingreso">Ingreso Con Facebook</string>
+    <string name="msg_no_busqueda">No se encontro</string>
 </resources>
