@@ -12,7 +12,10 @@ use Illuminate\Http\Request;
  * @author antho
  */
 class PublicacionController extends Controller{
-
+    /**
+     * 
+     * @param Controlador para registrar publicaciones indexando con correo_persona a cada persona
+     */
     public function registrar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -41,13 +44,10 @@ class PublicacionController extends Controller{
         }
     }
     
-    public function postImage(Request $request){
-        $this->validate($request,[
-            'photo'=>'required|image'
-        ]);
-        $user=Auth::user();
-    }
-
+    /**
+     * 
+     * @param Controlador para listar todas la publicaciones qeu tengan estado true
+     */
     public function listar() {
         $lista = Publicacion::where('estado', "true")->orderBy('created_at', 'desc')->get();
         $data = array();
@@ -56,7 +56,10 @@ class PublicacionController extends Controller{
         }
         return response()->json($data, 200);
     }
-
+    /**
+     * 
+     * @param Controlador para listar por persona indexando como parametro el correo_persona
+     */
     public function listarUser($correo_persona) {
         $this->correo_persona = $correo_persona;
         $lista = Publicacion::whereHas('persona', function ($ad) {
@@ -68,7 +71,10 @@ class PublicacionController extends Controller{
         }
         return response()->json($data, 200);
     }
-
+    /**
+     * 
+     * @param Controlador para modificar publicacion utilizando como principal parametro el external_id
+     */
     public function modificar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -92,7 +98,10 @@ class PublicacionController extends Controller{
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
     }
-
+    /**
+     * 
+     * @param Controlador para eliminar publicacion, eliminado logico por estado
+     */
     public function eliminar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();

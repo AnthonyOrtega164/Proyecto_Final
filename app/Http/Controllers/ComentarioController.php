@@ -12,7 +12,10 @@ use Illuminate\Http\Request;
  * @author antho
  */
 class ComentarioController extends Controller{
-
+    /**
+     * 
+     * @param Controlador para registrar comentarios indexados por id_publicacion a cada publicacion
+     */
     public function registrar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -36,7 +39,10 @@ class ComentarioController extends Controller{
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
     }
-
+    /**
+     * 
+     * @param Controlador para listar comentario utiliza como parametros de la consulta id_publicacion para que solo se listen los que estan indexados
+     */
     public function listar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -62,7 +68,10 @@ class ComentarioController extends Controller{
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
     }
-
+    /**
+     * 
+     * @param Controlador para eliminar comentario, solo eliminado logico con estado true o falso
+     */
     public function eliminar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
