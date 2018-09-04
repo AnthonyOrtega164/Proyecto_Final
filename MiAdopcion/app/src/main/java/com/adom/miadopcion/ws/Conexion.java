@@ -12,36 +12,28 @@ import java.util.HashMap;
 
 public class Conexion {
 
-    private  final static String API_URL="http://localhost:8080/Proyecto_Final/public/index.php/";
+    private static final String API_URL="https://mi-adopcion.000webhostapp.com/public/";
 
-    public static VolleyPeticion<Publicacion> listar
+    public static VolleyPeticion<Publicacion[]> listar
             (@NonNull final Context context,
-             @NonNull Response.Listener<Publicacion> responseListener,
+             @NonNull Response.Listener<Publicacion[]> responseListener,
              @NonNull Response.ErrorListener errorListener){
         final String url=API_URL+"listar";
         VolleyPeticion request=new VolleyPeticion(context,Request.Method.GET,url,responseListener,errorListener);
-        request.setResponseClass(Publicacion.class);
+        request.setResponseClass(Publicacion[].class);
         return request;
     }
 
-    public static VolleyPeticion<Persona> iniciarSesion(
-            @NonNull final Context context,
+    public static VolleyPeticion<Persona> iniciarSesion
+            (@NonNull final Context context,
             @NonNull final HashMap mapa,
             @NonNull Response.Listener<Persona> responseListener,
-            @NonNull Response.ErrorListener errorListener
-    ){
+            @NonNull Response.ErrorListener errorListener){
         final String url = API_URL+"inicio_sesion";
-        VolleyPeticion request =
-                new VolleyPeticion(context,
-                Request.Method.POST,
-                url,
-                mapa,
-                HashMap.class,
-                String.class,
-                responseListener,
-                errorListener);
+        VolleyPeticion request = new VolleyPeticion(context, Request.Method.POST, url, mapa, HashMap.class, String.class, responseListener, errorListener);
         request.setResponseClass(Persona.class);
         return request;
     }
+
 
 }

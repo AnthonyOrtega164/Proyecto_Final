@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
             }
         });
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -87,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     mapa.put("correo_persona",user.getEmail());
                     mapa.put("nombre_persona",user.getDisplayName());
                     mapa.put("telefono_persona",user.getPhoneNumber());
-                    mapa.put("foto_persona",user.getPhotoUrl().getPath());
+                    mapa.put("foto_persona",user.getPhotoUrl().toString());
                     VolleyPeticion<Persona> inicio=
                             Conexion.iniciarSesion(getApplicationContext(),
                                     mapa,
@@ -101,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onErrorResponse(VolleyError error){
                                     VolleyTiposError errores= VolleyProcesadorResultado.parseErrorResponse(error);
-                                    Toast.makeText(getApplicationContext(),errores.errorMessage,Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(),errores.messageBody,Toast.LENGTH_LONG).show();
                                 }
                             }
                     );

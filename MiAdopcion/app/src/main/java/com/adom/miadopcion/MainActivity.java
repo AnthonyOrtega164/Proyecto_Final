@@ -40,15 +40,20 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListaAdaptadorPublicaciones listaAdaptadorWS;
-    private ListView listView;
+    private ListView mlistView;
     private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mlistView=(ListView) findViewById(R.id.mi_lista);
+
+        listaAdaptadorWS=new ListaAdaptadorPublicaciones(this);
+        mlistView.setAdapter(listaAdaptadorWS);
         requestQueue= Volley.newRequestQueue(getApplicationContext());
         FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-        setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -83,11 +88,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void consultarWS(){
-        VolleyPeticion<Publicacion> films = Conexion.listar(getApplicationContext(), new Response.Listener<Publicacion>() {
+        VolleyPeticion<Publicacion[]> films = Conexion.listar(this, new Response.Listener<Publicacion[]>() {
                     @Override
-                    public void onResponse(Publicacion response) {
+                    public void onResponse(Publicacion[] response) {
                         listaAdaptadorWS=new ListaAdaptadorPublicaciones(Arrays.asList(response),getApplicationContext());
-                        listView.setAdapter(listaAdaptadorWS);
+                        mlistView.setAdapter(listaAdaptadorWS);
                     }
                 },
                 new Response.ErrorListener() {

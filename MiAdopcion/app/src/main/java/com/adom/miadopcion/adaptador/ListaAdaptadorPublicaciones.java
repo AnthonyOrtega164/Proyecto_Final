@@ -42,15 +42,15 @@ public class ListaAdaptadorPublicaciones extends ArrayAdapter<Publicacion>{
         View item=null;
         if(dataSet.isEmpty()){
             item=inflater.inflate(R.layout.lista_vacia,null);
-        }else{
-            item=inflater.inflate(R.layout.item_lista,null);
+        }else {
+            item = inflater.inflate(R.layout.item_lista, null);
         }
         new DownloadImageTask((ImageView) item.findViewById(R.id.imgFilm)).execute(dataSet.get(position).ruta_imagen);
 
-        TextView titulo =(TextView)item.findViewById(R.id.titulo);
-        TextView descripcion =(TextView)item.findViewById(R.id.descripcion);
-        TextView created_at =(TextView)item.findViewById(R.id.fecha);
-        Publicacion publicacion =dataSet.get(position);
+        TextView titulo = (TextView) item.findViewById(R.id.titulo);
+        TextView descripcion = (TextView) item.findViewById(R.id.descripcion);
+        TextView created_at = (TextView) item.findViewById(R.id.fecha);
+        Publicacion publicacion = dataSet.get(position);
         titulo.setText(publicacion.titulo);
         descripcion.setText(publicacion.descripcion);
         created_at.setText(publicacion.created_at);
@@ -68,7 +68,7 @@ public class ListaAdaptadorPublicaciones extends ArrayAdapter<Publicacion>{
                 InputStream in=new java.net.URL(urldisplay).openStream();
                 mIcon11= BitmapFactory.decodeStream(in);
             }catch (Exception e){
-                Log.e("Error",e.getMessage());
+                Log.e("Error",e.toString());
                 e.printStackTrace();
             }
             return mIcon11;
