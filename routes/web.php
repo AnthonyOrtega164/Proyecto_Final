@@ -3,14 +3,14 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/inicio_sesion','PersonaController@inicioSesion');
-$router->get('/listar', 'PublicacionController@listar');
-$router->get('/listarUser/{correo_persona}', 'PublicacionController@listarUser');
-$router->post('/registrar','PublicacionController@registrar');
-$router->post('/modificar','PublicacionController@modificar');
-$router->post('/eliminar','PublicacionController@eliminar');
-$router->post('/listarComentario', 'ComentarioController@listar');
-$router->post('/registrarComentario','ComentarioController@registrar');
-$router->post('/eliminarComentario','ComentarioController@eliminar');
+$router->Post('/inicio_sesion','PersonaController@inicioSesion');
+$router->Get('/listar', 'PublicacionController@listar');
+$router->Get('/listarUser/{correo_persona}', 'PublicacionController@listarUser');
+$router->Post('/registrar','PublicacionController@registrar');
+$router->Post('/modificar','PublicacionController@modificar');
+$router->Post('/eliminar','PublicacionController@eliminar');
+$router->Post('/listarComentario', 'ComentarioController@listar');
+$router->Post('/registrarComentario','ComentarioController@registrar');
+$router->Post('/eliminarComentario','ComentarioController@eliminar');
 
 

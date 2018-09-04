@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    android:background="@drawable/gradiente"
-    tools:showIn="@layout/app_bar_main">
-
+    tools:showIn="@layout/app_bar_main"
+    android:background="@drawable/gradiente">
+    <ListView
+        android:id="@+id/mi_lista"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#b5b5b5"
+        android:dividerHeight="1dp">
+    </ListView>
 </android.support.constraint.ConstraintLayout>

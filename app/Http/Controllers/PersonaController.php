@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
  *
  * @author antho
  */
-class PersonaController {
+class PersonaController extends Controller{
 
     public function inicioSesion(Request $request) {
         if ($request->json()) {

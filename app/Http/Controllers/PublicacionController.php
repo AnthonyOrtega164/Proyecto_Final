@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
  *
  * @author antho
  */
-class PublicacionController {
+class PublicacionController extends Controller{
 
     public function registrar(Request $request) {
         if ($request->isJson()) {

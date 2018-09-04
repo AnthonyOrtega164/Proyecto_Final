@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:background="@drawable/gradiente">
 
     <include
         layout="@layout/app_bar_main"
@@ -22,15 +23,5 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-    <ListView
-        android:id="@+id/mi_lista"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    </ListView>
-</LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

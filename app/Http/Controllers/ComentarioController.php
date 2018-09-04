@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
  *
  * @author antho
  */
-class ComentarioController {
+class ComentarioController extends Controller{
 
     public function registrar(Request $request) {
         if ($request->isJson()) {

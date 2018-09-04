@@ -1,5 +1,6 @@
 package com.adom.miadopcion;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,49 +11,43 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
-
+import com.adom.miadopcion.controlador.utilidades.Utilidades;
 import com.adom.miadopcion.modelos.Publicacion;
-import com.adom.miadopcion.ws.Conexion;
-import com.adom.miadopcion.ws.VolleyPeticion;
-import com.adom.miadopcion.ws.VolleyProcesadorResultado;
-import com.adom.miadopcion.ws.VolleyTiposError;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ListaAdaptadorPublicaciones listaAdaptadorWS;
-    private ListView mlistView;
-    private RequestQueue requestQueue;
-
+    private DatabaseReference mDatabase;
+    private FirebaseUser user;
+    public static String nombre_persona=" ";
+    public static String correo_persona=" ";
+    public static String telefono_persona=" ";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mlistView=(ListView) findViewById(R.id.mi_lista);
-
-        listaAdaptadorWS=new ListaAdaptadorPublicaciones(this);
-        mlistView.setAdapter(listaAdaptadorWS);
-        requestQueue= Volley.newRequestQueue(getApplicationContext());
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,45 +67,106 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        mDatabase= FirebaseDatabase.getInstance().getReference();
+
+        user= FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null) {
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             View hView = navigationView.getHeaderView(0);
+            nombre_persona=user.getDisplayName();
+            correo_persona=user.getEmail();
+            telefono_persona=user.getPhoneNumber();
             TextView nombre =(TextView)hView.findViewById(R.id.texto_nombre);
             TextView correo = (TextView) hView.findViewById(R.id.texto_correo);
             nombre.setText(user.getDisplayName());
             correo.setText(user.getEmail());
             Picasso.get().load(user.getPhotoUrl()).resize(200, 200).into((ImageView) hView.findViewById(R.id.foto_usario));
             navigationView.setNavigationItemSelectedListener(this);
-            consultarWS();
+            eventoGuardarPelicula();
         }else{
             irLogin();
         }
     }
 
-    private void consultarWS(){
-        VolleyPeticion<Publicacion[]> films = Conexion.listar(this, new Response.Listener<Publicacion[]>() {
-                    @Override
-                    public void onResponse(Publicacion[] response) {
-                        listaAdaptadorWS=new ListaAdaptadorPublicaciones(Arrays.asList(response),getApplicationContext());
-                        mlistView.setAdapter(listaAdaptadorWS);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyTiposError errores= VolleyProcesadorResultado.parseErrorResponse(error);
-                        Toast.makeText(getBaseContext(),errores.errorMessage,Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-        requestQueue.add(films);
+    /**
+     * Cerrar Sesion:
+     * Metodo que cierra sesion de firebase autentificacion y de el login de facebook
+     */
+    public void cerrarSesion(){
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
+        irLogin();
     }
 
+    /**
+     * irLogin:
+     * Metodo que destruye las anteriores tareas y crea una nuevapara ir a la activity Login Activity
+     */
     private void irLogin(){
         Intent intent=new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mDatabase= FirebaseDatabase.getInstance().getReference();
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Publicacion post = dataSnapshot.getValue(Publicacion.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),"No se pudo Guardar",Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    private void eventoGuardarPelicula( ){
+        mDatabase.child("publicacion").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Publicacion pelicula = new Publicacion();
+                pelicula.id_publicacion = "1";
+                pelicula.correo_persona = user.getEmail();
+                pelicula.categoria="Adopcion";
+                pelicula.descripcion="adadw";
+                pelicula.estado="true";
+                pelicula.telefono_persona=user.getPhoneNumber();
+                pelicula.created_at= Utilidades.formatoFecha(new Date());
+                guardar(pelicula);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),"No se pudo guardar su pelicula", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void guardar(Publicacion pelicula){
+        try {
+            String key = mDatabase.child("publicacion").push().getKey();
+            Gson gson =new Gson();
+            Map<String, Object> postValues = new HashMap<>();
+            postValues=gson.fromJson(gson.toJson(pelicula),postValues.getClass());
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/publicacion/"+key, postValues);
+            mDatabase.updateChildren(childUpdates);
+            Toast toast1 = Toast.makeText(getApplicationContext(),"Se ha registrado su pelicula",Toast.LENGTH_SHORT);
+            toast1.setGravity(Gravity.CENTER_VERTICAL,0,0);
+            toast1.show();
+        }catch (Exception ex){
+            Toast toast1 = Toast.makeText(getApplicationContext(),"No se ha registrado su pelicula",Toast.LENGTH_SHORT);
+            toast1.setGravity(Gravity.CENTER_VERTICAL,0,0);
+            toast1.show();
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -131,9 +187,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -143,12 +196,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void cerrarSesion(){
-        FirebaseAuth.getInstance().signOut();
-        LoginManager.getInstance().logOut();
-        irLogin();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -164,7 +211,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

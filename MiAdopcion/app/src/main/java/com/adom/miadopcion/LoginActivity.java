@@ -6,17 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.adom.miadopcion.modelos.Persona;
-import com.adom.miadopcion.ws.Conexion;
-import com.adom.miadopcion.ws.VolleyPeticion;
-import com.adom.miadopcion.ws.VolleyProcesadorResultado;
-import com.adom.miadopcion.ws.VolleyTiposError;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,10 +24,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
-import java.util.HashMap;
+
 
 public class LoginActivity extends AppCompatActivity {
-
+    /**
+     * LoginButton: boton de login de facebook
+     *
+     */
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
@@ -43,16 +38,19 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
 
     private ProgressBar progressBar;
-    private RequestQueue requestQueue;
+    private TextView text1;
+    private TextView text2;
+    private TextView text3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        requestQueue= Volley.newRequestQueue(getApplicationContext());
         setContentView(R.layout.login);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        text1=(TextView) findViewById(R.id.textView2);
+        text2=(TextView) findViewById(R.id.textView4);
+        text3=(TextView) findViewById(R.id.textView3);
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -68,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(getApplicationContext(), "se ha cancelado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.cancelado, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -82,29 +80,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    HashMap<String, String> mapa=new HashMap<>();
-                    mapa.put("correo_persona",user.getEmail());
-                    mapa.put("nombre_persona",user.getDisplayName());
-                    mapa.put("telefono_persona",user.getPhoneNumber());
-                    mapa.put("foto_persona",user.getPhotoUrl().toString());
-                    VolleyPeticion<Persona> inicio=
-                            Conexion.iniciarSesion(getApplicationContext(),
-                                    mapa,
-                                    new Response.Listener<Persona>() {
-                                @Override
-                                public void onResponse(Persona response) {
-                                        Toast.makeText(getApplicationContext(),response.mensaje,Toast.LENGTH_LONG).show();
-                                }
-                            },
-                            new Response.ErrorListener(){
-                                @Override
-                                public void onErrorResponse(VolleyError error){
-                                    VolleyTiposError errores= VolleyProcesadorResultado.parseErrorResponse(error);
-                                    Toast.makeText(getApplicationContext(),errores.messageBody,Toast.LENGTH_LONG).show();
-                                }
-                            }
-                    );
-                    requestQueue.add(inicio);
                     goMainScreen();
                 }
             }
@@ -114,6 +89,9 @@ public class LoginActivity extends AppCompatActivity {
     private void handleFacebookAccessToken(AccessToken accessToken) {
         progressBar.setVisibility(View.VISIBLE);
         loginButton.setVisibility(View.GONE);
+        text2.setVisibility(View.GONE);
+        text1.setVisibility(View.GONE);
+        text3.setVisibility(View.GONE);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -124,10 +102,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.GONE);
                 loginButton.setVisibility(View.VISIBLE);
+                text2.setVisibility(View.VISIBLE);
+                text1.setVisibility(View.VISIBLE);
+                text3.setVisibility(View.VISIBLE);
             }
         });
     }
 
+    /**
+     * goMainScreen:
+     * Metodo que destruye las anteriores tareas y crea una nuevapara ir a la activity MainActivity
+     */
     private void goMainScreen() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
