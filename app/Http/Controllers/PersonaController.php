@@ -9,11 +9,7 @@ use Illuminate\Http\Request;
  * @author antho
  */
 class PersonaController extends Controller{
-    /**
-     * 
-     * @param Controlador para inicio de sesion hace una consulta indexando mediante correo_persona consultando si ya esta ingresado o no.
-     * Si es que resulta que no guarda los datos del usuario
-     */
+
     public function inicioSesion(Request $request) {
         if ($request->json()) {
             try {

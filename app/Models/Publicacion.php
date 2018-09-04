@@ -9,25 +9,16 @@ use Illuminate\Database\Eloquent\Model;
  * @author antho
  */
 class Publicacion extends Model {
-    /**
-     * 
-     * @param Modelo de publicacion, para la respectiva conexion y realizacion de la bd
-     */
+
     protected $table = 'publicacion';
     protected $primaryKey = 'id_publicacion';
     protected $fillable = ['external_id','titulo','descripcion', 'estado', 'categoria','created_at','updated_at','correo_persona','ruta_imagen','telefono_persona'];
     protected $guarded = ['id_publicacion'];
-    /**
-     * 
-     * @param Relacion con tabla Persona indexando mediante correo_persona
-     */
+    
     public function persona( ) {
         return $this->belongsTo('App\Models\Persona','correo_persona'); 
     }
-    /**
-     * 
-     * @param Relacion con tabla Comentario indexando mediante id_publicacion
-     */
+
     public function comentario( ) {
         return $this->hasMany('App\Models\Comentario','id_publicacion'); 
     }
