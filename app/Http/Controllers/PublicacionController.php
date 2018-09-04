@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 class PublicacionController {
 
     public function registrar(Request $request) {
-
         if ($request->isJson()) {
             $data = $request->json()->all();
             try {
@@ -40,6 +39,13 @@ class PublicacionController {
         } else {
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
+    }
+    
+    public function postImage(Request $request){
+        $this->validate($request,[
+            'photo'=>'required|image'
+        ]);
+        $user=Auth::user();
     }
 
     public function listar() {

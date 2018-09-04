@@ -20,7 +20,7 @@ class PersonaController {
                     $persona->nombre_persona=$data["nombre_persona"];
                     $persona->correo_persona = $data["correo_persona"];
                     $persona->telefono_persona = $data["telefono_persona"];
-                    $persona->foto_persona = $data["foto_persona"];
+                    $persona->foto_persona = $data['foto_persona'];
                     $persona->save();
                     return response()->json(["mensaje" => "Bienvenido, nuevo ususario!!", "siglas" => "OE"], 200);
                 } else {
