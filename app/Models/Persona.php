@@ -3,7 +3,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Persona extends Model {
-<<<<<<< HEAD
     /**
      * 
      * @param Modelo de persona, para la respectiva conexion y realizacion de la bd
@@ -12,8 +11,6 @@ class Persona extends Model {
      *
      * @var $table referencia a la tabla  
      */
-=======
->>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     protected $table = 'persona';
     /**
      *
@@ -35,7 +32,10 @@ class Persona extends Model {
      * @var $guaded datos sensibles
      */
     protected $guarded = ['correo_persona'];
-    
+    /**
+     * 
+     * @param Relacion con tabla Publicacion indexando mediante correo_persona
+     */
     public function publicacion() {
         return $this->hasMany('App\Models\Publicacion', 'correo_persona');
     }

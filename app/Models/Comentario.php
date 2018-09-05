@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  * @author antho
  */
 class Comentario extends Model {
-<<<<<<< HEAD
     /**
      * 
      * @param Modelo de comentario, para la respectiva conexion y realizacion de la bd
@@ -18,9 +17,6 @@ class Comentario extends Model {
      *
      * @var $table referencia a la tabla 
      */
-=======
-
->>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     protected $table = 'comentario';
     /**
      *
@@ -37,7 +33,10 @@ class Comentario extends Model {
      * @var $guaded datos sensibles
      */
     protected $guarded = ['id_comentario'];
-
+    /**
+     * 
+     * @param Relacion con tabla Publicacion indexando mediante id_publicacion
+     */
     public function publicacion() {
         return $this->belongsTo('App\Models\Publicacion', 'id_publicacion');
     }
