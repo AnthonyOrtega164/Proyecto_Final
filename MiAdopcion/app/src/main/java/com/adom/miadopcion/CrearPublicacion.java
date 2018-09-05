@@ -54,6 +54,7 @@ public class CrearPublicacion extends AppCompatActivity {
     //Imagenes
     private AlertDialog _photoDialog;
     private Uri mImageUri;
+    private String imagen1;
     private static final int ACTIVITY_SELECT_IMAGE = 1020,
             ACTIVITY_SELECT_FROM_CAMERA = 1040, ACTIVITY_SHARE = 1030;
     private PhotoUtils photoUtils;
@@ -193,7 +194,7 @@ public class CrearPublicacion extends AppCompatActivity {
         });
     }
 
-    private void cargarDatosFirebase(String titulo, String descripcion,String categoria, String telefono) {
+    private void cargarDatosFirebase(String titulo, String descripcion,String categoria, String telefono,String ruta_imagen) {
 
         Map<String, Object> datosUsuario = new HashMap<>();
         datosUsuario.put("titulo",titulo);
@@ -202,6 +203,7 @@ public class CrearPublicacion extends AppCompatActivity {
         datosUsuario.put("telefono_persona",telefono);
         datosUsuario.put("correo_persona",MainActivity.correo_persona);
         datosUsuario.put("created_at",Utilidades.formatoFecha(new Date()));
+        datosUsuario.put("ruta_imagen",ruta_imagen);
 
         mDatabase.child("publicacion").push().setValue(datosUsuario);
         Toast toast1 = Toast.makeText(getApplicationContext(), "Se ha registrado su publicacion", Toast.LENGTH_SHORT);
@@ -265,6 +267,7 @@ public class CrearPublicacion extends AppCompatActivity {
             case R.id.chPublicar:
                 //aqui crean el objeto de la publicación y lo procesan en firebase
                 StorageReference filePath=mStorage.child("fotos").child(mImageUri.getLastPathSegment());
+                imagen1=mImageUri.getPath();
                 filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -281,7 +284,7 @@ public class CrearPublicacion extends AppCompatActivity {
                 RadioButton rb = (RadioButton) mRadio.getChildAt(indice);
                 String categoria = rb.getText().toString();
                 String telefono = mEditTextTelefono.getText().toString();
-                cargarDatosFirebase(titulo, descripcion,categoria,telefono);
+                cargarDatosFirebase(titulo, descripcion,categoria,telefono,imagen1);
 
                 return true;
         }
