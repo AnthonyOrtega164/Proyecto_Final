@@ -5,12 +5,10 @@ public class Publicacion {
     public String titulo;
     public String descripcion;
     public String categoria;
-    public String estado;
     public String created_at;
     public String updated_at;
     public String correo_persona;
     public String telefono_persona;
-    public String ruta_imagen;
 
     public String getId_publicacion() {
         return id_publicacion;
@@ -44,14 +42,6 @@ public class Publicacion {
         this.categoria = categoria;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public String getCreated_at() {
         return created_at;
     }
@@ -83,14 +73,5 @@ public class Publicacion {
     public void setTelefono_persona(String telefono_persona) {
         this.telefono_persona = telefono_persona;
     }
-
-    public String getRuta_imagen() {
-        return ruta_imagen;
-    }
-
-    public void setRuta_imagen(String ruta_imagen) {
-        this.ruta_imagen = ruta_imagen;
-    }
-
 
 }
