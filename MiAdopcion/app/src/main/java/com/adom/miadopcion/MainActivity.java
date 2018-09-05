@@ -93,20 +93,10 @@ public class MainActivity extends AppCompatActivity
             correo.setText(user.getEmail());
             Picasso.get().load(user.getPhotoUrl()).resize(200, 200).into((ImageView) hView.findViewById(R.id.foto_usario));
             navigationView.setNavigationItemSelectedListener(this);
-            eventoGuardarPelicula();
         }else{
-            //irLogin();
-            //Esto borran
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            View hView = navigationView.getHeaderView(0);
-            TextView nombre =(TextView)hView.findViewById(R.id.texto_nombre);
-            TextView correo = (TextView)hView.findViewById(R.id.texto_correo);
-            nombre.setText("hola");
-            correo.setText("hola");
+            irLogin();
         }
 
-        /**Adaptador
-         * */
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
@@ -166,48 +156,6 @@ public class MainActivity extends AppCompatActivity
         };
     }
 
-    private void eventoGuardarPelicula( ){
-        mDatabase.child("publicacion").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Publicacion pelicula = new Publicacion();
-                pelicula.id_publicacion = "1";
-                pelicula.correo_persona = user.getEmail();
-                pelicula.categoria="Adopcion";
-                pelicula.descripcion="adadw";
-                pelicula.estado="true";
-                pelicula.telefono_persona=user.getPhoneNumber();
-                pelicula.created_at= Utilidades.formatoFecha(new Date());
-                guardar(pelicula);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),"No se pudo guardar su pelicula", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void guardar(Publicacion pelicula){
-        try {
-            String key = mDatabase.child("publicacion").push().getKey();
-            Gson gson =new Gson();
-            Map<String, Object> postValues = new HashMap<>();
-            postValues=gson.fromJson(gson.toJson(pelicula),postValues.getClass());
-            Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/publicacion/"+key, postValues);
-            mDatabase.updateChildren(childUpdates);
-            Toast toast1 = Toast.makeText(getApplicationContext(),"Se ha registrado su pelicula",Toast.LENGTH_SHORT);
-            toast1.setGravity(Gravity.CENTER_VERTICAL,0,0);
-            toast1.show();
-        }catch (Exception ex){
-            Toast toast1 = Toast.makeText(getApplicationContext(),"No se ha registrado su pelicula",Toast.LENGTH_SHORT);
-            toast1.setGravity(Gravity.CENTER_VERTICAL,0,0);
-            toast1.show();
-        }
-
-    }
-
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -255,9 +203,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            Intent intent = new Intent(this, CrearPublicacion.class);
+            intent.removeCategory(Intent.CATEGORY_LAUNCHER);
+            startActivity(intent);
+            return true;
         } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

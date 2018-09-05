@@ -1,6 +1,7 @@
 package com.adom.miadopcion;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,15 +15,35 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adom.miadopcion.Imagenes.PhotoUtils;
+import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
+import com.adom.miadopcion.controlador.utilidades.Utilidades;
+import com.adom.miadopcion.modelos.Publicacion;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CrearPublicacion extends AppCompatActivity {
 
@@ -36,6 +57,8 @@ public class CrearPublicacion extends AppCompatActivity {
     private ImageButton photoButton;
     private ImageView photoViewer;
     private BottomNavigationView barra;
+    private DatabaseReference mDatabase;
+
 
     //
 
@@ -57,7 +80,7 @@ public class CrearPublicacion extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        mDatabase= FirebaseDatabase.getInstance().getReference();
         barra = findViewById(R.id.barraImagen);
         barra.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -174,6 +197,54 @@ public class CrearPublicacion extends AppCompatActivity {
         switch (id){
             case R.id.chPublicar:
                 //aqui crean el objeto de la publicación y lo procesan en firebase
+
+                mDatabase.child("publicacion").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final Publicacion pelicula = new Publicacion();
+                        setContentView(R.layout.activity_crear_publicacion);
+                        EditText titulo1 = findViewById(R.id.titulo);
+                        pelicula.setTitulo(titulo1.getText().toString());
+                        pelicula.setCorreo_persona(MainActivity.correo_persona);
+                        EditText descripcion = (EditText) findViewById(R.id.descripcion);
+                        pelicula.setDescripcion(descripcion.getText().toString());
+                        if(pelicula.getTitulo()==null) {
+                            Toast toast1 = Toast.makeText(getApplicationContext(), "Datos Vacios", Toast.LENGTH_SHORT);
+                            toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                            toast1.show();
+                            Intent intent = new Intent(getApplicationContext(), CrearPublicacion.class);
+                            intent.removeCategory(Intent.CATEGORY_LAUNCHER);
+                            startActivity(intent);
+                        }else{
+                            try {
+                                String key = mDatabase.child("publicacion").push().getKey();
+                                Gson gson = new Gson();
+                                Map<String, Object> postValues = new HashMap<>();
+                                postValues = gson.fromJson(gson.toJson(pelicula), postValues.getClass());
+                                Map<String, Object> childUpdates = new HashMap<>();
+                                childUpdates.put("/publicacion/" + key, postValues);
+                                mDatabase.updateChildren(childUpdates);
+                                Toast toast1 = Toast.makeText(getApplicationContext(), "Se ha registrado su publicacion", Toast.LENGTH_SHORT);
+                                toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toast1.show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                intent.removeCategory(Intent.CATEGORY_LAUNCHER);
+                                startActivity(intent);
+
+                            } catch (Exception ex) {
+                                Toast toast1 = Toast.makeText(getApplicationContext(), "No se ha registrado su publicacion", Toast.LENGTH_SHORT);
+                                toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toast1.show();
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getApplicationContext(),"No se pudo guardar su pelicula", Toast.LENGTH_LONG).show();
+                    }
+                });
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

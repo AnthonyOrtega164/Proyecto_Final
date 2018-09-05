@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo" />
+        app:layout_constraintTop_toBottomOf="@id/titulo" />
 
     <ImageView
         android:id="@+id/photoViewer"
@@ -58,9 +58,9 @@
         android:contentDescription="Agregar Imagen"
         android:elevation="6dp"
         android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/titulo"
+        app:layout_constraintBottom_toBottomOf="@id/titulo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titulo"
+        app:layout_constraintTop_toTopOf="@id/titulo"
         app:srcCompat="@drawable/ic_image_black_24dp" />
 
     <EditText
