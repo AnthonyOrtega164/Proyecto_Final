@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "149312815609-biofa1lr9a89j8743ngoe2lirj16vj0s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adom.miadopcion",
+            "certificate_hash": "f28f765d0c3c842eef250ddc7bb313f0feb9b0a1"
+          }
+        },
+        {
           "client_id": "149312815609-kj72gf40gkss7n32ejgllr07sm530fk3.apps.googleusercontent.com",
           "client_type": 3
         }

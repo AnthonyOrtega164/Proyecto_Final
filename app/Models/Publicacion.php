@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Publicacion extends Model {
+<<<<<<< HEAD
     /**
      * 
      * @param Modelo de publicacion, para la respectiva conexion y realizacion de la bd
@@ -12,6 +13,9 @@ class Publicacion extends Model {
      *
      * @var $table referencia a la tabla
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     protected $table = 'publicacion';
     /**
      *
@@ -28,17 +32,11 @@ class Publicacion extends Model {
      * @var $guaded datos sensibles
      */
     protected $guarded = ['id_publicacion'];
-    /**
-     * 
-     * @param Relacion con tabla Persona indexando mediante correo_persona
-     */
+    
     public function persona( ) {
         return $this->belongsTo('App\Models\Persona','correo_persona'); 
     }
-    /**
-     * 
-     * @param Relacion con tabla Comentario indexando mediante id_publicacion
-     */
+
     public function comentario( ) {
         return $this->hasMany('App\Models\Comentario','id_publicacion'); 
     }

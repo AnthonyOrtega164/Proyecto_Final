@@ -7,12 +7,16 @@ use App\Models\Publicacion;
 use Illuminate\Http\Request;
 
 class PublicacionController extends Controller{
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request
      * Controlador para registrar publicaciones indexando con correo_persona a cada persona
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function registrar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -41,10 +45,20 @@ class PublicacionController extends Controller{
         }
     }
     
+<<<<<<< HEAD
     /**
      * Controlador para listar todas la publicaciones que tengan estado true
      * @return response json
      */
+=======
+    public function postImage(Request $request){
+        $this->validate($request,[
+            'photo'=>'required|image'
+        ]);
+        $user=Auth::user();
+    }
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function listar() {
         $lista = Publicacion::where('estado', "true")->orderBy('created_at', 'desc')->get();
         $data = array();
@@ -54,12 +68,15 @@ class PublicacionController extends Controller{
         return response()->json($data, 200);
     }
 
+<<<<<<< HEAD
     /**
      * 
      * @param type $correo_persona
      * Controlador para listar por persona indexando como parametro el correo_persona
      * @return response json
      */
+=======
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function listarUser($correo_persona) {
         $this->correo_persona = $correo_persona;
         $lista = Publicacion::whereHas('persona', function ($ad) {
@@ -71,12 +88,16 @@ class PublicacionController extends Controller{
         }
         return response()->json($data, 200);
     }
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request
      * Controlador para modificar publicacion utilizando como principal parametro el external_id
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function modificar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -100,12 +121,16 @@ class PublicacionController extends Controller{
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
     }
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request
      * Controlador para eliminar publicacion, eliminado logico por estado
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function eliminar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();

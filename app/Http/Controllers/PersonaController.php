@@ -5,6 +5,7 @@ use App\Models\Persona;
 use Illuminate\Http\Request;
 
 class PersonaController extends Controller{
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request
@@ -12,6 +13,9 @@ class PersonaController extends Controller{
      * Si es que resulta que no guarda los datos del usuario
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function inicioSesion(Request $request) {
         if ($request->json()) {
             try {

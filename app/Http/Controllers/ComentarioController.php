@@ -7,12 +7,16 @@ use App\Models\Comentario;
 use Illuminate\Http\Request;
 
 class ComentarioController extends Controller{
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request 
      * Controlador para registrar comentarios indexados por id_publicacion a cada publicacion
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function registrar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -36,12 +40,16 @@ class ComentarioController extends Controller{
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
     }
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request
      * Controlador para listar comentario utiliza como parametros de la consulta id_publicacion para que solo se listen los que estan indexados
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function listar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
@@ -67,12 +75,16 @@ class ComentarioController extends Controller{
             return response()->json(["mensaje" => "La data no tiene el formato deseado", "siglas" => "NDF"], 400);
         }
     }
+<<<<<<< HEAD
     /**
      * 
      * @param Request $request
      * Controlador para eliminar comentario, solo eliminado logico con estado true o falso
      * @return response json
      */
+=======
+
+>>>>>>> 25cf6c50a8b1cbde60ae06afb54077ec9bf799cf
     public function eliminar(Request $request) {
         if ($request->isJson()) {
             $data = $request->json()->all();
