@@ -3,16 +3,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Persona;
 use Illuminate\Http\Request;
-/**
- * Description of PersonaController
- *
- * @author antho
- */
+
 class PersonaController extends Controller{
     /**
      * 
-     * @param Controlador para inicio de sesion hace una consulta indexando mediante correo_persona consultando si ya esta ingresado o no.
+     * @param Request $request
+     * Controlador para inicio de sesion hace una consulta indexando mediante correo_persona consultando si ya esta ingresado o no.
      * Si es que resulta que no guarda los datos del usuario
+     * @return response json
      */
     public function inicioSesion(Request $request) {
         if ($request->json()) {

@@ -6,15 +6,12 @@ use App\Models\Publicacion;
 use App\Models\Comentario;
 use Illuminate\Http\Request;
 
-/**
- * Description of ComentarioController
- *
- * @author antho
- */
 class ComentarioController extends Controller{
     /**
      * 
-     * @param Controlador para registrar comentarios indexados por id_publicacion a cada publicacion
+     * @param Request $request 
+     * Controlador para registrar comentarios indexados por id_publicacion a cada publicacion
+     * @return response json
      */
     public function registrar(Request $request) {
         if ($request->isJson()) {
@@ -41,7 +38,9 @@ class ComentarioController extends Controller{
     }
     /**
      * 
-     * @param Controlador para listar comentario utiliza como parametros de la consulta id_publicacion para que solo se listen los que estan indexados
+     * @param Request $request
+     * Controlador para listar comentario utiliza como parametros de la consulta id_publicacion para que solo se listen los que estan indexados
+     * @return response json
      */
     public function listar(Request $request) {
         if ($request->isJson()) {
@@ -70,7 +69,9 @@ class ComentarioController extends Controller{
     }
     /**
      * 
-     * @param Controlador para eliminar comentario, solo eliminado logico con estado true o falso
+     * @param Request $request
+     * Controlador para eliminar comentario, solo eliminado logico con estado true o falso
+     * @return response json
      */
     public function eliminar(Request $request) {
         if ($request->isJson()) {

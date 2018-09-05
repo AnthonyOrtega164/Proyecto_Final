@@ -6,15 +6,12 @@ use App\Models\Persona;
 use App\Models\Publicacion;
 use Illuminate\Http\Request;
 
-/**
- * Description of PublicacionController
- *
- * @author antho
- */
 class PublicacionController extends Controller{
     /**
      * 
-     * @param Controlador para registrar publicaciones indexando con correo_persona a cada persona
+     * @param Request $request
+     * Controlador para registrar publicaciones indexando con correo_persona a cada persona
+     * @return response json
      */
     public function registrar(Request $request) {
         if ($request->isJson()) {
@@ -45,8 +42,8 @@ class PublicacionController extends Controller{
     }
     
     /**
-     * 
-     * @param Controlador para listar todas la publicaciones qeu tengan estado true
+     * Controlador para listar todas la publicaciones que tengan estado true
+     * @return response json
      */
     public function listar() {
         $lista = Publicacion::where('estado', "true")->orderBy('created_at', 'desc')->get();
@@ -56,9 +53,12 @@ class PublicacionController extends Controller{
         }
         return response()->json($data, 200);
     }
+
     /**
      * 
-     * @param Controlador para listar por persona indexando como parametro el correo_persona
+     * @param type $correo_persona
+     * Controlador para listar por persona indexando como parametro el correo_persona
+     * @return response json
      */
     public function listarUser($correo_persona) {
         $this->correo_persona = $correo_persona;
@@ -73,7 +73,9 @@ class PublicacionController extends Controller{
     }
     /**
      * 
-     * @param Controlador para modificar publicacion utilizando como principal parametro el external_id
+     * @param Request $request
+     * Controlador para modificar publicacion utilizando como principal parametro el external_id
+     * @return response json
      */
     public function modificar(Request $request) {
         if ($request->isJson()) {
@@ -100,7 +102,9 @@ class PublicacionController extends Controller{
     }
     /**
      * 
-     * @param Controlador para eliminar publicacion, eliminado logico por estado
+     * @param Request $request
+     * Controlador para eliminar publicacion, eliminado logico por estado
+     * @return response json
      */
     public function eliminar(Request $request) {
         if ($request->isJson()) {
