@@ -59,13 +59,20 @@ public class CrearPublicacion extends AppCompatActivity {
     private BottomNavigationView barra;
     private DatabaseReference mDatabase;
 
-
+    EditText mEditTextTitulo,mEditTextDescripcion,mEditTextTelefono;
+    RadioGroup mRadio;
     //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_publicacion);
+        mEditTextTitulo = findViewById(R.id.titulo);
+        mEditTextDescripcion = findViewById(R.id.descripcion);
+        mEditTextTelefono = findViewById(R.id.telefono);
+        mRadio = findViewById(R.id.cbCategorias);
+        mDatabase= FirebaseDatabase.getInstance().getReference();
+        solicitarDatosFirebase();
 
         if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
@@ -80,7 +87,7 @@ public class CrearPublicacion extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        mDatabase= FirebaseDatabase.getInstance().getReference();
+
         barra = findViewById(R.id.barraImagen);
         barra.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -139,14 +146,66 @@ public class CrearPublicacion extends AppCompatActivity {
 
     }
 
-
-    //Imagenes
+            //Imagenes
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mImageUri != null)
             outState.putString("Uri", mImageUri.toString());
     }
+
+    private void solicitarDatosFirebase() {
+        mDatabase.child("publicacion").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(final DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                    mDatabase.child("publicacion").child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Publicacion user = snapshot.getValue(Publicacion.class);
+                            String titulo = user.getTitulo();
+                            String descripcion = user.getDescripcion();
+                            String categoria = user.getCategoria();
+                            String telefono = user.getTelefono_persona();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void cargarDatosFirebase(String titulo, String descripcion,String categoria, String telefono) {
+
+        Map<String, Object> datosUsuario = new HashMap<>();
+        datosUsuario.put("titulo",titulo);
+        datosUsuario.put("descripcion",descripcion);
+        datosUsuario.put("categoria",categoria);
+        datosUsuario.put("telefono_persona",telefono);
+        datosUsuario.put("correo_persona",MainActivity.correo_persona);
+        datosUsuario.put("created_at",Utilidades.formatoFecha(new Date()));
+
+        mDatabase.child("publicacion").push().setValue(datosUsuario);
+        Toast toast1 = Toast.makeText(getApplicationContext(), "Se ha registrado su publicacion", Toast.LENGTH_SHORT);
+        toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast1.show();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.removeCategory(Intent.CATEGORY_LAUNCHER);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -198,52 +257,16 @@ public class CrearPublicacion extends AppCompatActivity {
             case R.id.chPublicar:
                 //aqui crean el objeto de la publicación y lo procesan en firebase
 
-                mDatabase.child("publicacion").addListenerForSingleValueEvent(new ValueEventListener() {
+                String titulo = mEditTextTitulo.getText().toString();
+                String descripcion = mEditTextDescripcion.getText().toString();
+                int radioButtonId = mRadio.getCheckedRadioButtonId();
+                View radioButton = mRadio.findViewById(radioButtonId);
+                int indice = mRadio.indexOfChild(radioButton);
+                RadioButton rb = (RadioButton) mRadio.getChildAt(indice);
+                String categoria = rb.getText().toString();
+                String telefono = mEditTextTelefono.getText().toString();
+                cargarDatosFirebase(titulo, descripcion,categoria,telefono);
 
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        final Publicacion pelicula = new Publicacion();
-                        setContentView(R.layout.activity_crear_publicacion);
-                        EditText titulo1 = findViewById(R.id.titulo);
-                        pelicula.setTitulo(titulo1.getText().toString());
-                        pelicula.setCorreo_persona(MainActivity.correo_persona);
-                        EditText descripcion = (EditText) findViewById(R.id.descripcion);
-                        pelicula.setDescripcion(descripcion.getText().toString());
-                        if(pelicula.getTitulo()==null) {
-                            Toast toast1 = Toast.makeText(getApplicationContext(), "Datos Vacios", Toast.LENGTH_SHORT);
-                            toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                            toast1.show();
-                            Intent intent = new Intent(getApplicationContext(), CrearPublicacion.class);
-                            intent.removeCategory(Intent.CATEGORY_LAUNCHER);
-                            startActivity(intent);
-                        }else{
-                            try {
-                                String key = mDatabase.child("publicacion").push().getKey();
-                                Gson gson = new Gson();
-                                Map<String, Object> postValues = new HashMap<>();
-                                postValues = gson.fromJson(gson.toJson(pelicula), postValues.getClass());
-                                Map<String, Object> childUpdates = new HashMap<>();
-                                childUpdates.put("/publicacion/" + key, postValues);
-                                mDatabase.updateChildren(childUpdates);
-                                Toast toast1 = Toast.makeText(getApplicationContext(), "Se ha registrado su publicacion", Toast.LENGTH_SHORT);
-                                toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                                toast1.show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                intent.removeCategory(Intent.CATEGORY_LAUNCHER);
-                                startActivity(intent);
-
-                            } catch (Exception ex) {
-                                Toast toast1 = Toast.makeText(getApplicationContext(), "No se ha registrado su publicacion", Toast.LENGTH_SHORT);
-                                toast1.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                                toast1.show();
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(),"No se pudo guardar su pelicula", Toast.LENGTH_LONG).show();
-                    }
-                });
 
                 return true;
         }

@@ -70,7 +70,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegistroPublicacionActivity" />
         <activity
             android:name=".CrearPublicacion"
             android:label="@string/lblCrear" />
