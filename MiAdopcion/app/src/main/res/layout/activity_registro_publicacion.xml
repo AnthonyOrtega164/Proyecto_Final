@@ -115,7 +115,7 @@
             android:lineSpacingExtra="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#DE000000"
-            app:layout_constraintBottom_toTopOf="@+id/supporting_text"
+            app:layout_constraintBottom_toTopOf="@+id/telefonop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +135,7 @@
             app:srcCompat="@drawable/side_nav_bar" />
 
         <me.biubiubiu.justifytext.library.JustifyTextView
-            android:id="@+id/supporting_text"
+            android:id="@+id/telefonop"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -179,7 +179,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/txtNumeroComentarios"
-            app:layout_constraintTop_toBottomOf="@+id/supporting_text" />
+            app:layout_constraintTop_toBottomOf="@+id/telefonop" />
 
         <ListView
             android:id="@+id/lista_comentarios"

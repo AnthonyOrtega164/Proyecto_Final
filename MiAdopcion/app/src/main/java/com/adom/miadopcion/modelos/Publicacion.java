@@ -1,9 +1,6 @@
 package com.adom.miadopcion.modelos;
 
 public class Publicacion {
-    /**
-     * @param variables tipo string para datos referentes a las publicaciones del usuario para la conexion con firebase.
-     */
     public String id_publicacion;
     public String titulo;
     public String descripcion;

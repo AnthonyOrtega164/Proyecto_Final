@@ -28,28 +28,16 @@ import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
     /**
-     * @param LoginButton: boton de login de facebook.
+     * LoginButton: boton de login de facebook
      *
      */
     private LoginButton loginButton;
-    /**
-     *
-     * @param CallbackManager: las devoluciones de llamada en FacebookSdk desde el método Activity.
-     */
     private CallbackManager callbackManager;
-    /**
-     *
-     * @param  FirebaseAuth: clase abstracta pública que extiende Object del punto de entrada del Firebase Authentication SDK.
-     */
+
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
-    /**
-     * @param ProgressBar: Un elemento de interfaz de usuario que indica el progreso de una operación.
-     */
+
     private ProgressBar progressBar;
-    /**
-     * @param TextView: Un elemento de interfaz de usuario que muestra texto al usuario
-     */
     private TextView text1;
     private TextView text2;
     private TextView text3;
@@ -84,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
+
             }
         });
         firebaseAuth = FirebaseAuth.getInstance();
@@ -98,11 +87,6 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
-    /**
-     *
-     * primero deja visibles componentes, luego obtiene la credencial de facebook y permite el acceso verificando con el accessToken.
-     *
-     */
     private void handleFacebookAccessToken(AccessToken accessToken) {
         progressBar.setVisibility(View.VISIBLE);
         loginButton.setVisibility(View.GONE);
@@ -128,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * goMainScreen:
-     *  Metodo que destruye las anteriores tareas y crea una nuevapara ir a la activity MainActivity
+     * Metodo que destruye las anteriores tareas y crea una nuevapara ir a la activity MainActivity
      */
     private void goMainScreen() {
         Intent intent = new Intent(this, MainActivity.class);

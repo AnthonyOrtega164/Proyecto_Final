@@ -18,4 +18,6 @@
     <string name="descr">Esta Aplicación esta hecha con el fin de encontrar un buen hogar a nuestras mascotas.</string>
     <string name="com_facebook_ingreso">Ingreso Con Facebook</string>
     <string name="msg_no_busqueda">No se encontro</string>
+    <string name="lblCrear">Publicar para adopción</string>
+    <string name="creCategoria">Que tipo de animal es:</string>
 </resources>

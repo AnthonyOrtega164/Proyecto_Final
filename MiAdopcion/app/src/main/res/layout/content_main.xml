@@ -9,11 +9,10 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main"
     android:background="@drawable/gradiente">
-    <ListView
-        android:id="@+id/mi_lista"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#b5b5b5"
-        android:dividerHeight="1dp">
-    </ListView>
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" />
 </android.support.constraint.ConstraintLayout>

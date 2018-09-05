@@ -1,15 +1,16 @@
 package com.adom.miadopcion;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
 import com.adom.miadopcion.controlador.utilidades.Utilidades;
 import com.adom.miadopcion.modelos.Publicacion;
 import com.facebook.login.LoginManager;
@@ -32,8 +34,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
@@ -44,6 +48,12 @@ public class MainActivity extends AppCompatActivity
     public static String nombre_persona=" ";
     public static String correo_persona=" ";
     public static String telefono_persona=" ";
+
+    /*Lista*/
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +95,38 @@ public class MainActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
             eventoGuardarPelicula();
         }else{
-            irLogin();
+            //irLogin();
+            //Esto borran
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View hView = navigationView.getHeaderView(0);
+            TextView nombre =(TextView)hView.findViewById(R.id.texto_nombre);
+            TextView correo = (TextView)hView.findViewById(R.id.texto_correo);
+            nombre.setText("hola");
+            correo.setText("hola");
         }
+
+        /**Adaptador
+         * */
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        List<Publicacion> lista = new ArrayList<Publicacion>();
+        Publicacion prueba = new Publicacion();
+        prueba.categoria = "purbea";
+        prueba.correo_persona="javier@hotmail.com";
+        prueba.descripcion="hermoso Labrador asdsa asdas asd asd asdas dasd asdas d asd asdsad ad as das sd asd asd asd asdas";
+        prueba.telefono_persona="2564223";
+        prueba.titulo = "Labrador en adopción";
+        lista.add(prueba);
+        lista.add(prueba);
+
+
+        mAdapter = new ListaAdaptadorPublicaciones(lista,this);
+        mRecyclerView.setAdapter(mAdapter);
+
     }
 
     /**
@@ -189,10 +229,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        switch (id){
+            case R.id.action_settings:
+                cerrarSesion();
+                return true;
+            case R.id.pAction_add:
+                Intent intent = new Intent(this, CrearPublicacion.class);
+                intent.removeCategory(Intent.CATEGORY_LAUNCHER);
+                startActivity(intent);
+                return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            cerrarSesion();
-            return true;
+
         }
 
         return super.onOptionsItemSelected(item);
