@@ -19,5 +19,5 @@
     <string name="com_facebook_ingreso">Ingreso Con Facebook</string>
     <string name="msg_no_busqueda">No se encontro</string>
     <string name="lblCrear">Publicar para adopción</string>
-    <string name="creCategoria">Que tipo de animal es:</string>
+    <string name="creCategoria">Categoria: </string>
 </resources>

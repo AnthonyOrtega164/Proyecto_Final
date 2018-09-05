@@ -32,11 +32,15 @@ import com.adom.miadopcion.Imagenes.PhotoUtils;
 import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
 import com.adom.miadopcion.controlador.utilidades.Utilidades;
 import com.adom.miadopcion.modelos.Publicacion;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -58,6 +62,7 @@ public class CrearPublicacion extends AppCompatActivity {
     private ImageView photoViewer;
     private BottomNavigationView barra;
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
 
     EditText mEditTextTitulo,mEditTextDescripcion,mEditTextTelefono;
     RadioGroup mRadio;
@@ -72,6 +77,7 @@ public class CrearPublicacion extends AppCompatActivity {
         mEditTextTelefono = findViewById(R.id.telefono);
         mRadio = findViewById(R.id.cbCategorias);
         mDatabase= FirebaseDatabase.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance().getReference();
         solicitarDatosFirebase();
 
         if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.M) {
@@ -212,6 +218,7 @@ public class CrearPublicacion extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey("Uri")) {
             mImageUri = Uri.parse(savedInstanceState.getString("Uri"));
+
         }
     }
 
@@ -236,6 +243,7 @@ public class CrearPublicacion extends AppCompatActivity {
         Bitmap bounds = photoUtils.getImage(uri);
         if (bounds != null) {
             setImageBitmap(bounds);
+
         }
     }
 
@@ -256,7 +264,15 @@ public class CrearPublicacion extends AppCompatActivity {
         switch (id){
             case R.id.chPublicar:
                 //aqui crean el objeto de la publicación y lo procesan en firebase
-
+                StorageReference filePath=mStorage.child("fotos").child(mImageUri.getLastPathSegment());
+                filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast toast=Toast.makeText(getApplicationContext(),"Se subio correctamente la foto",Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                        toast.show();
+                    }
+                });
                 String titulo = mEditTextTitulo.getText().toString();
                 String descripcion = mEditTextDescripcion.getText().toString();
                 int radioButtonId = mRadio.getCheckedRadioButtonId();
@@ -266,7 +282,6 @@ public class CrearPublicacion extends AppCompatActivity {
                 String categoria = rb.getText().toString();
                 String telefono = mEditTextTelefono.getText().toString();
                 cargarDatosFirebase(titulo, descripcion,categoria,telefono);
-
 
                 return true;
         }
