@@ -76,8 +76,40 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        mDatabase=FirebaseDatabase.getInstance().getReference();
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
 
-        mDatabase= FirebaseDatabase.getInstance().getReference();
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        final List<Publicacion> lista = new ArrayList<Publicacion>();
+        Publicacion prueba = new Publicacion();
+        mDatabase.child("publicacion").getRoot().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                lista.removeAll(lista);
+                for (DataSnapshot snapshot :
+                        dataSnapshot.getChildren()){
+                    Publicacion publicacion = snapshot.getValue(Publicacion.class);
+                    publicacion.categoria = publicacion.getCategoria();
+                    publicacion.correo_persona=publicacion.getCorreo_persona();
+                    publicacion.descripcion=publicacion.getDescripcion();
+                    publicacion.telefono_persona=publicacion.getTelefono_persona();
+                    publicacion.titulo = publicacion.getTitulo();
+                    lista.add(publicacion);
+
+                }
+                mAdapter = new ListaAdaptadorPublicaciones(lista,getApplicationContext());
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),"No se pudo Guardar",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
         user= FirebaseAuth.getInstance().getCurrentUser();
 
@@ -97,28 +129,7 @@ public class MainActivity extends AppCompatActivity
             irLogin();
         }
 
-        mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        List<Publicacion> lista = new ArrayList<Publicacion>();
-        Publicacion prueba = new Publicacion();
-        prueba.categoria = "purbea";
-        prueba.correo_persona="javier@hotmail.com";
-        prueba.descripcion="hermoso Labrador asdsa asdas asd asd asdas dasd asdas d asd asdsad ad as das sd asd asd asd asdas";
-        prueba.telefono_persona="2564223";
-        prueba.titulo = "Labrador en adopción";
-        lista.add(prueba);
-        lista.add(prueba);
-
-
-        mAdapter = new ListaAdaptadorPublicaciones(lista,this);
-        mRecyclerView.setAdapter(mAdapter);
-
     }
-
     /**
      * Cerrar Sesion:
      * Metodo que cierra sesion de firebase autentificacion y de el login de facebook
@@ -139,6 +150,7 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -146,8 +158,8 @@ public class MainActivity extends AppCompatActivity
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Publicacion post = dataSnapshot.getValue(Publicacion.class);
-            }
+
+                }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
