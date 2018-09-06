@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.adom.miadopcion.R;
 import com.adom.miadopcion.modelos.Publicacion;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,8 +49,6 @@ public class ListaAdaptadorPublicaciones extends RecyclerView.Adapter<ListaAdapt
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final Publicacion card = mPublicacion.get(position);
-
-
 
         holder.foto.setImageResource(R.drawable.mascota);
         holder.titulo.setText(card.titulo);
