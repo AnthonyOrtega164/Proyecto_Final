@@ -21,31 +21,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
+<<<<<<< HEAD
 import com.adom.miadopcion.controlador.utilidades.Utilidades;
 import com.adom.miadopcion.modelos.Imagen;
 import com.adom.miadopcion.modelos.Publicacion;
 import com.adom.miadopcion.modelos.Publication;
 import com.bumptech.glide.Glide;
+=======
+import com.adom.miadopcion.modelos.Publicacion;
+>>>>>>> 37c7b4226c4d15fdba6ead5dc40e73c6a172f276
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
 
     private FirebaseDatabase mDatabase;
 
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     public static String nombre_persona=" ";
     public static String correo_persona=" ";
     public static String telefono_persona=" ";
+    private StorageReference mStorage;
 
     /*Lista*/
     private RecyclerView mRecyclerView;
@@ -96,20 +96,20 @@ public class MainActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 lista.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    Publication pub = snapshot.getValue(Publication.class);
-
                     Publicacion nueva = new Publicacion();
-                    if(pub==null){
+                    if(snapshot.getValue(Publicacion.class)==null){
                         Toast toast=Toast.makeText(getApplicationContext(),"Error al listar datos",Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                         toast.show();
                     }else{
+<<<<<<< HEAD
                         Glide.with(MainActivity.this)
                                 .load(snapshot.getValue(Publicacion.class).getRuta_Imagen())
                                 .fitCenter()
                                 .centerCrop()
                                 .into(findViewById(R.id.foto));
+=======
+>>>>>>> 37c7b4226c4d15fdba6ead5dc40e73c6a172f276
                         nueva.setDescripcion(snapshot.getValue(Publicacion.class).getDescripcion());
                         nueva.setTitulo(snapshot.getValue(Publicacion.class).getTitulo());
                         nueva.setCategoria(snapshot.getValue(Publicacion.class).getCategoria());
@@ -117,17 +117,7 @@ public class MainActivity extends AppCompatActivity
                         nueva.setCreated_at(snapshot.getValue(Publicacion.class).getCreated_at());
                         nueva.setTelefono_persona(snapshot.getValue(Publicacion.class).getTelefono_persona());
                         lista.add(nueva);
-                        /*nueva.setCategoria(pub.getCategoria());
-                        nueva.setTitulo(pub.getTitulo());
-                        nueva.setCorreo_persona(pub.getCorreo_persona());
-                        nueva.setCreated_at(pub.getCreated_at());
-                        nueva.setDescripcion(pub.getDescripcion());
-                        nueva.setTelefono_persona(pub.getTelefono_persona());
-                        nueva.setId_publicacion(snapshot.getKey());
-                        lista.add(nueva);*/
-                        System.out.println(snapshot.getValue(Publicacion.class).getDescripcion());
                     }
-
                 }
                 mAdapter = new ListaAdaptadorPublicaciones(lista, getApplicationContext());
                 mRecyclerView.setAdapter(mAdapter);
@@ -138,8 +128,6 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(),"No se pudo Guardar",Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
         user= FirebaseAuth.getInstance().getCurrentUser();
 
@@ -244,15 +232,95 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            Intent intent = new Intent(this, CrearPublicacion.class);
-            intent.removeCategory(Intent.CATEGORY_LAUNCHER);
-            startActivity(intent);
+            mDatabase = FirebaseDatabase.getInstance();
+
+            mRecyclerView = findViewById(R.id.recycler_view);
+            mRecyclerView.setHasFixedSize(true);
+
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            final List<Publicacion> lista = new ArrayList<Publicacion>();
+
+            mDatabase.getReference("publicacion").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lista.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Publicacion nueva = new Publicacion();
+                        if(snapshot.getValue(Publicacion.class)==null){
+                            Toast toast=Toast.makeText(getApplicationContext(),"Error al listar datos",Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                            toast.show();
+                        }else{
+                            nueva.setDescripcion(snapshot.getValue(Publicacion.class).getDescripcion());
+                            nueva.setTitulo(snapshot.getValue(Publicacion.class).getTitulo());
+                            nueva.setCategoria(snapshot.getValue(Publicacion.class).getCategoria());
+                            nueva.setCorreo_persona(snapshot.getValue(Publicacion.class).getCorreo_persona());
+                            nueva.setCreated_at(snapshot.getValue(Publicacion.class).getCreated_at());
+                            nueva.setTelefono_persona(snapshot.getValue(Publicacion.class).getTelefono_persona());
+                            lista.add(nueva);
+                        }
+
+                    }
+                    mAdapter = new ListaAdaptadorPublicaciones(lista, getApplicationContext());
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(),"No se pudo Guardar",Toast.LENGTH_SHORT).show();
+                }
+            });
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.nav_gallery) {
+            mDatabase = FirebaseDatabase.getInstance();
+
+            mRecyclerView = findViewById(R.id.recycler_view);
+            mRecyclerView.setHasFixedSize(true);
+
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            final List<Publicacion> lista = new ArrayList<Publicacion>();
+
+            mDatabase.getReference("publicacion").orderByChild("correo_persona").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    lista.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                        Publicacion nueva = new Publicacion();
+                        if(snapshot.getValue(Publicacion.class)==null){
+                            Toast toast=Toast.makeText(getApplicationContext(),"Error al listar datos",Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                            toast.show();
+                        }else{
+
+                            nueva.setDescripcion(snapshot.getValue(Publicacion.class).getDescripcion());
+                            nueva.setTitulo(snapshot.getValue(Publicacion.class).getTitulo());
+                            nueva.setCategoria(snapshot.getValue(Publicacion.class).getCategoria());
+                            nueva.setCorreo_persona(snapshot.getValue(Publicacion.class).getCorreo_persona());
+                            nueva.setCreated_at(snapshot.getValue(Publicacion.class).getCreated_at());
+                            nueva.setTelefono_persona(snapshot.getValue(Publicacion.class).getTelefono_persona());
+                            lista.add(nueva);
+                        }
+
+                    }
+                    mAdapter = new ListaAdaptadorPublicaciones(lista, getApplicationContext());
+                    mRecyclerView.setAdapter(mAdapter);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getApplicationContext(),"No se pudo Guardar",Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/pata"
-            android:title="Nueva Publicacion" />
+            android:title="Todas las publicaciones" />
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"

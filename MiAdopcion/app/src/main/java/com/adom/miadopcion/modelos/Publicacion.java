@@ -9,6 +9,15 @@ public class Publicacion {
     public String updated_at;
     public String correo_persona;
     public String telefono_persona;
+    public String ruta_imagen;
+
+    public String getRuta_imagen() {
+        return ruta_imagen;
+    }
+
+    public void setRuta_imagen(String ruta_imagen) {
+        this.ruta_imagen = ruta_imagen;
+    }
 
     public String getId_publicacion() {
         return id_publicacion;

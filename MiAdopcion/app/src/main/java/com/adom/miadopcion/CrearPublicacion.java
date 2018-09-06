@@ -56,7 +56,6 @@ public class CrearPublicacion extends AppCompatActivity {
     //Imagenes
     private AlertDialog _photoDialog;
     private Uri mImageUri;
-    private String imagen1;
     private static final int ACTIVITY_SELECT_IMAGE = 1020,
             ACTIVITY_SELECT_FROM_CAMERA = 1040, ACTIVITY_SHARE = 1030;
     private PhotoUtils photoUtils;
@@ -271,14 +270,20 @@ public class CrearPublicacion extends AppCompatActivity {
             case R.id.chPublicar:
                 //aqui crean el objeto de la publicación y lo procesan en firebase
                 StorageReference filePath=mStorage.child("fotos").child(mImageUri.getLastPathSegment());
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 37c7b4226c4d15fdba6ead5dc40e73c6a172f276
                 filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         @SuppressWarnings ("VisibleForTests") Uri descargarFoto = taskSnapshot.getDownloadUrl();
+<<<<<<< HEAD
                       //  imagen1 = mImageUri.getQuery();
 
+=======
+>>>>>>> 37c7b4226c4d15fdba6ead5dc40e73c6a172f276
                         String titulo = mEditTextTitulo.getText().toString();
                         String descripcion = mEditTextDescripcion.getText().toString();
                         int radioButtonId = mRadio.getCheckedRadioButtonId();
@@ -288,14 +293,20 @@ public class CrearPublicacion extends AppCompatActivity {
                         String categoria = rb.getText().toString();
                         String telefono = mEditTextTelefono.getText().toString();
                         cargarDatosFirebase(titulo, descripcion,categoria,telefono,descargarFoto.toString());
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 37c7b4226c4d15fdba6ead5dc40e73c6a172f276
                     }
 
                 });
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 37c7b4226c4d15fdba6ead5dc40e73c6a172f276
                 return true;
         }
         return super.onOptionsItemSelected(item);
