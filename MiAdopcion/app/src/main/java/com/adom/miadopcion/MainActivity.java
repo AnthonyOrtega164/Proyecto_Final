@@ -22,8 +22,10 @@ import android.widget.Toast;
 
 import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
 import com.adom.miadopcion.controlador.utilidades.Utilidades;
+import com.adom.miadopcion.modelos.Imagen;
 import com.adom.miadopcion.modelos.Publicacion;
 import com.adom.miadopcion.modelos.Publication;
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -103,7 +105,11 @@ public class MainActivity extends AppCompatActivity
                         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                         toast.show();
                     }else{
-
+                        Glide.with(MainActivity.this)
+                                .load(snapshot.getValue(Publicacion.class).getRuta_Imagen())
+                                .fitCenter()
+                                .centerCrop()
+                                .into(findViewById(R.id.foto));
                         nueva.setDescripcion(snapshot.getValue(Publicacion.class).getDescripcion());
                         nueva.setTitulo(snapshot.getValue(Publicacion.class).getTitulo());
                         nueva.setCategoria(snapshot.getValue(Publicacion.class).getCategoria());

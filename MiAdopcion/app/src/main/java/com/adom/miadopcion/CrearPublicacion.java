@@ -2,6 +2,7 @@ package com.adom.miadopcion;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -51,6 +52,7 @@ import java.util.Map;
 
 public class CrearPublicacion extends AppCompatActivity {
 
+
     //Imagenes
     private AlertDialog _photoDialog;
     private Uri mImageUri;
@@ -64,6 +66,7 @@ public class CrearPublicacion extends AppCompatActivity {
     private BottomNavigationView barra;
     private DatabaseReference mDatabase;
     private StorageReference mStorage;
+    private ProgressDialog mProgressDialog;
 
     EditText mEditTextTitulo,mEditTextDescripcion,mEditTextTelefono;
     RadioGroup mRadio;
@@ -261,30 +264,37 @@ public class CrearPublicacion extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        mProgressDialog = new ProgressDialog(this);
         int id = item.getItemId();
 
         switch (id){
             case R.id.chPublicar:
                 //aqui crean el objeto de la publicación y lo procesan en firebase
                 StorageReference filePath=mStorage.child("fotos").child(mImageUri.getLastPathSegment());
-                imagen1=mImageUri.getPath();
+
+
                 filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast toast=Toast.makeText(getApplicationContext(),"Se subio correctamente la foto",Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                        toast.show();
+                        @SuppressWarnings ("VisibleForTests") Uri descargarFoto = taskSnapshot.getDownloadUrl();
+                      //  imagen1 = mImageUri.getQuery();
+
+                        String titulo = mEditTextTitulo.getText().toString();
+                        String descripcion = mEditTextDescripcion.getText().toString();
+                        int radioButtonId = mRadio.getCheckedRadioButtonId();
+                        View radioButton = mRadio.findViewById(radioButtonId);
+                        int indice = mRadio.indexOfChild(radioButton);
+                        RadioButton rb = (RadioButton) mRadio.getChildAt(indice);
+                        String categoria = rb.getText().toString();
+                        String telefono = mEditTextTelefono.getText().toString();
+                        cargarDatosFirebase(titulo, descripcion,categoria,telefono,descargarFoto.toString());
+
+
+
                     }
+
                 });
-                String titulo = mEditTextTitulo.getText().toString();
-                String descripcion = mEditTextDescripcion.getText().toString();
-                int radioButtonId = mRadio.getCheckedRadioButtonId();
-                View radioButton = mRadio.findViewById(radioButtonId);
-                int indice = mRadio.indexOfChild(radioButton);
-                RadioButton rb = (RadioButton) mRadio.getChildAt(indice);
-                String categoria = rb.getText().toString();
-                String telefono = mEditTextTelefono.getText().toString();
-                cargarDatosFirebase(titulo, descripcion,categoria,telefono,imagen1);
+
 
                 return true;
         }
