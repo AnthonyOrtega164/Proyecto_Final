@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.adom.miadopcion.adaptador.ListaAdaptadorPublicaciones;
 import com.adom.miadopcion.controlador.utilidades.Utilidades;
 import com.adom.miadopcion.modelos.Publicacion;
+import com.adom.miadopcion.modelos.Publication;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,7 +44,9 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DatabaseReference mDatabase;
+
+    private FirebaseDatabase mDatabase;
+
     private FirebaseUser user;
     public static String nombre_persona=" ";
     public static String correo_persona=" ";
@@ -76,30 +79,51 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        mDatabase=FirebaseDatabase.getInstance().getReference();
+
+        mDatabase = FirebaseDatabase.getInstance();
+
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         final List<Publicacion> lista = new ArrayList<Publicacion>();
-        Publicacion prueba = new Publicacion();
-        mDatabase.child("publicacion").getRoot().addValueEventListener(new ValueEventListener() {
+
+        mDatabase.getReference("publicacion").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                lista.removeAll(lista);
-                for (DataSnapshot snapshot :
-                        dataSnapshot.getChildren()){
-                    Publicacion publicacion = snapshot.getValue(Publicacion.class);
-                    publicacion.categoria = publicacion.getCategoria();
-                    publicacion.correo_persona=publicacion.getCorreo_persona();
-                    publicacion.descripcion=publicacion.getDescripcion();
-                    publicacion.telefono_persona=publicacion.getTelefono_persona();
-                    publicacion.titulo = publicacion.getTitulo();
-                    lista.add(publicacion);
+                lista.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    Publication pub = snapshot.getValue(Publication.class);
+
+                    Publicacion nueva = new Publicacion();
+                    if(pub==null){
+                        Toast toast=Toast.makeText(getApplicationContext(),"Error al listar datos",Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                        toast.show();
+                    }else{
+
+                        nueva.setDescripcion(snapshot.getValue(Publicacion.class).getDescripcion());
+                        nueva.setTitulo(snapshot.getValue(Publicacion.class).getTitulo());
+                        nueva.setCategoria(snapshot.getValue(Publicacion.class).getCategoria());
+                        nueva.setCorreo_persona(snapshot.getValue(Publicacion.class).getCorreo_persona());
+                        nueva.setCreated_at(snapshot.getValue(Publicacion.class).getCreated_at());
+                        nueva.setTelefono_persona(snapshot.getValue(Publicacion.class).getTelefono_persona());
+                        lista.add(nueva);
+                        /*nueva.setCategoria(pub.getCategoria());
+                        nueva.setTitulo(pub.getTitulo());
+                        nueva.setCorreo_persona(pub.getCorreo_persona());
+                        nueva.setCreated_at(pub.getCreated_at());
+                        nueva.setDescripcion(pub.getDescripcion());
+                        nueva.setTelefono_persona(pub.getTelefono_persona());
+                        nueva.setId_publicacion(snapshot.getKey());
+                        lista.add(nueva);*/
+                        System.out.println(snapshot.getValue(Publicacion.class).getDescripcion());
+                    }
 
                 }
-                mAdapter = new ListaAdaptadorPublicaciones(lista,getApplicationContext());
+                mAdapter = new ListaAdaptadorPublicaciones(lista, getApplicationContext());
                 mRecyclerView.setAdapter(mAdapter);
             }
 
@@ -154,7 +178,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        mDatabase= FirebaseDatabase.getInstance().getReference();
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
